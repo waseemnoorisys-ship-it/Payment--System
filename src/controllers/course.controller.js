@@ -33,4 +33,28 @@ const getCourseById = async (req, res) => {
   }
 };
 
-module.exports = { getAllCourses, getCourseById };
+//check function for is they are accessable to course or not
+const checkAccess = async (req, res) => {
+  try {
+    const result = await courseService.checkCourseAccess(
+      req.user._id,
+      req.params.id
+    );
+    res.status(200).json({ success: true, data: result });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+
+//it handle only the req or res via function that is written in service.js file 
+const getEnrolledCourses = async (req, res) => {
+  try {
+    const courses = await courseService.getEnrolledCourses(req.user._id);
+    res.status(200).json({ success: true, data: { courses } });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+module.exports = { getAllCourses, getCourseById ,checkAccess ,getEnrolledCourses};

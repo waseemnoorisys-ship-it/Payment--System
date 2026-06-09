@@ -80,6 +80,16 @@ const refreshToken = async (req, res) => {
   }
 };
 
+//get my profile details req res 
+const getProfile = async (req, res) => {
+  try {
+    const user = await authService.getProfile(req.user._id);
+    res.status(200).json({ success: true, data: { user } });
+  } catch (error) {
+    res.status(404).json({ success: false, message: error.message });
+  }
+};
+
 // ─── LOGOUT ───────────────────────────────────────────────────────────────────
 const logout = async (req, res) => {
   try {
@@ -102,4 +112,4 @@ const logout = async (req, res) => {
   }
 };
 
-module.exports = { register, login, refreshToken, logout };
+module.exports = { register, login, refreshToken, logout , getProfile};

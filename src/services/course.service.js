@@ -1,4 +1,5 @@
 const Course = require('../models/course.model');
+const User = require('../models/User.model')
 
 // ─── Get all published courses ─────────────────────────────────────────────
 const getAllCourses = async (query = {}) => {
@@ -63,4 +64,26 @@ const getCourseById = async (courseId) => {
   return course;
 };
 
-module.exports = { getAllCourses, getCourseById };
+
+//check the user is accesable to course or not [what we need : 1) user_id 2) re.params === course name [web,devops,cyber security etc]]
+const checkCourseAccess = async (userId, courseId) => {
+  const user = await User.findById(userId);
+  if (!user) throw new Error('User not found');
+
+  const hasAccess = user.enrolledCourses.some(
+    (id) => id.toString() === courseId.toString()
+  );
+
+  return { hasAccess };
+};
+
+//after checking get the course that a user is enrolled what we need [ user_id : for specific details of it]
+
+const getEnrolledCourses = async (userId) => {
+  const user = await User.findById(userId)
+    .populate('enrolledCourses', 'title description instructor duration level thumbnail');
+
+  if (!user) throw new Error('User not found');
+  return user.enrolledCourses;
+};
+module.exports = { getAllCourses, getCourseById ,checkCourseAccess ,getEnrolledCourses};

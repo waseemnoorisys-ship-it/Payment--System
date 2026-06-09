@@ -48,6 +48,7 @@ const userSchema = new mongoose.Schema(
 );
 
 // ─── Hash password BEFORE saving to DB ───────────────────────────────────────
+// userSchema.pre('save', async function (next) {
 userSchema.pre('save', async function () {
   // Only hash if password was changed (not on profile updates)
   if (!this.isModified('password')) return ;
@@ -61,4 +62,5 @@ userSchema.methods.comparePassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-module.exports = mongoose.model('User', userSchema);
+// module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.models.User || mongoose.model("User", userSchema);

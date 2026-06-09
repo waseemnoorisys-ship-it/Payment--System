@@ -1,4 +1,4 @@
-const User = require('../models/User.model');
+const User = require('../models/user.model');
 const { generateAccessToken, generateRefreshToken } = require('../utils/jwt.utils');
 
 // ─── REGISTER ─────────────────────────────────────────────────────────────────
@@ -82,6 +82,13 @@ const refreshAccessToken = async (incomingRefreshToken) => {
   return { accessToken: newAccessToken };
 };
 
+//get my profile details what i am purchase or other details
+const getProfile = async (userId) => {
+  const user = await User.findById(userId).populate('enrolledCourses', 'title price instructor');
+  if (!user) throw new Error('User not found');
+  return user;
+};
+
 // ─── LOGOUT ───────────────────────────────────────────────────────────────────
 const logoutUser = async (userId) => {
   // Remove refresh token from DB — invalidates it immediately
@@ -93,4 +100,5 @@ module.exports = {
   loginUser,
   refreshAccessToken,
   logoutUser,
+  getProfile
 };

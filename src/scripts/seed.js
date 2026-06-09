@@ -1,6 +1,6 @@
 require('dotenv').config(); // load .env variables
 const mongoose = require('mongoose');
-const Course = require('../models/course.model');
+const Course = require('../models/Course.model');
 const connectDB = require('../config/db');
 
 const courses = [
